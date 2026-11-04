@@ -1,5 +1,6 @@
 package org.pluralsight;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,12 +19,11 @@ public class LedgerApp {
         TransactionWriterAndReader twr = new TransactionWriterAndReader();
         ArrayList<Transaction> transactions = twr.loadTransactions();
         transactionService = new TransactionService(transactions);
-
+        System.out.println(transactions);
         displayHome();
     }
 
     private static void displayHome() {
-        TransactionWriterAndReader trs = new TransactionWriterAndReader();
         String choice;
         do {
             System.out.println("""
@@ -36,7 +36,7 @@ public class LedgerApp {
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "D" -> promptDeposit();
-                case "P" -> { }
+                case "P" -> promptPayment();
                 case "L" -> displayLedger();
                 case "X" -> System.out.println("Thank you, good bye!");
                 default -> System.out.println("Invalid choice! Please enter D, P, L or X.");
@@ -57,7 +57,7 @@ public class LedgerApp {
 
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
-                case "A" -> { }
+                case "A" -> showAllTransactions();
                 case "D" -> { }
                 case "P" -> { }
                 case "R" -> displayReport();
@@ -93,6 +93,20 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("0"));
     }
 
+    private static void showAllTransactions() {
+        ArrayList<Transaction> allTransactions = transactionService.getAllTransaction();
+
+        if (allTransactions.isEmpty()) {
+            System.out.println("There are no transactions on file, returning to Menu ...");
+        } else {
+            System.out.println("Listing all transactions:");
+            for (Transaction trs: allTransactions) {
+                System.out.println(trs);
+            }
+        }
+    }
+
+
     private static void promptDeposit() {
         System.out.println("\n===== Add Deposit =====");
         System.out.print("Enter description: ");
@@ -120,6 +134,35 @@ public class LedgerApp {
         transactionService.addDeposit(description, vendor, amount);
 
         System.out.println("Deposit added successfully!");
+    }
+
+    private static void promptPayment() {
+        System.out.println("\n===== Make Payment =====");
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine().trim();
+
+        System.out.print("Enter vendor name: ");
+        String vendor = scanner.nextLine().trim();
+
+        double amount;
+
+        while (true) {
+            System.out.print("Enter payment amount: ");
+            try {
+                amount = Double.parseDouble(scanner.nextLine().trim());
+
+                if (!Double.isFinite(amount) || amount <= 0) {
+                    System.out.println("Payment amount must be greater than 0.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount! Please enter a valid number.");
+            }
+        }
+        transactionService.makePayment(description, vendor, amount * -1);
+
+        System.out.println("Payment made successfully!");
     }
 
 }
