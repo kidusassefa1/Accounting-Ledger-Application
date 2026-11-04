@@ -1,21 +1,29 @@
 package org.pluralsight;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LedgerApp {
-    static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
+    private static TransactionService transactionService;
 
     public static void main(String[] args) {
-        displayHome();
+
+        start();
+
     }
 
     private static void start() {
 
+        TransactionWriterAndReader twr = new TransactionWriterAndReader();
+        ArrayList<Transaction> transactions = twr.loadTransactions();
+        transactionService = new TransactionService(transactions);
 
+        displayHome();
     }
 
     private static void displayHome() {
-
+        TransactionWriterAndReader trs = new TransactionWriterAndReader();
         String choice;
         do {
             System.out.println("""
@@ -25,9 +33,9 @@ public class LedgerApp {
                     X - Exit
                     """);
 
-            choice = scanner.nextLine();
-            switch (choice.toUpperCase()) {
-                case "D" -> TransactionService.addDeposit();
+            choice = scanner.nextLine().trim().toUpperCase();
+            switch (choice) {
+                case "D" -> promptDeposit();
                 case "P" -> { }
                 case "L" -> displayLedger();
                 case "X" -> System.out.println("Thank you, good bye!");
@@ -47,7 +55,7 @@ public class LedgerApp {
                     H - Home
                     """);
 
-            choice = scanner.nextLine();
+            choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "A" -> { }
                 case "D" -> { }
@@ -58,7 +66,6 @@ public class LedgerApp {
             }
         } while (!choice.equalsIgnoreCase("H"));
     }
-
 
 
     public static void displayReport() {
@@ -73,7 +80,7 @@ public class LedgerApp {
                         0 - Back
                     """);
 
-            choice = scanner.nextLine();
+            choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1" -> { }
                 case "2" -> { }
@@ -86,6 +93,33 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("0"));
     }
 
+    private static void promptDeposit() {
+        System.out.println("\n===== Add Deposit =====");
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine().trim();
 
+        System.out.print("Enter vendor name: ");
+        String vendor = scanner.nextLine().trim();
+
+        double amount;
+
+        while (true) {
+            System.out.print("Enter deposit amount: ");
+            try {
+                amount = Double.parseDouble(scanner.nextLine().trim());
+
+                if (!Double.isFinite(amount) || amount <= 0) {
+                    System.out.println("Deposit amount must be greater than 0.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount! Please enter a valid number.");
+            }
+        }
+        transactionService.addDeposit(description, vendor, amount);
+
+        System.out.println("Deposit added successfully!");
+    }
 
 }
