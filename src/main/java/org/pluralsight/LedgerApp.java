@@ -2,6 +2,7 @@ package org.pluralsight;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class LedgerApp {
@@ -57,9 +58,9 @@ public class LedgerApp {
 
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
-                case "A" -> showAllTransactions();
-                case "D" -> { }
-                case "P" -> { }
+                case "A" -> displayAllTransactions();
+                case "D" -> displayDeposit();
+                case "P" -> displayPayment();
                 case "R" -> displayReport();
                 case "H" -> System.out.println("Returning to home screen ...");
                 default -> System.out.println("Invalid choice! Please enter A, D, P, R or H.");
@@ -93,7 +94,7 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("0"));
     }
 
-    private static void showAllTransactions() {
+    private static void displayAllTransactions() {
         ArrayList<Transaction> allTransactions = transactionService.getAllTransaction();
 
         if (allTransactions.isEmpty()) {
@@ -101,6 +102,32 @@ public class LedgerApp {
         } else {
             System.out.println("Listing all transactions:");
             for (Transaction trs: allTransactions) {
+                System.out.println(trs);
+            }
+        }
+    }
+
+    private static void displayDeposit() {
+        ArrayList<Transaction> depositArray = transactionService.getDeposit();
+
+        if (depositArray.isEmpty()) {
+            System.out.println("No deposits recorded on file. Returning to Menu ...");
+        } else {
+            System.out.println("Listing all Deposit Transactions:");
+            for (Transaction trs: depositArray) {
+                System.out.println(trs);
+            }
+        }
+    }
+
+    private static void displayPayment() {
+        ArrayList<Transaction> paymentArray = transactionService.getPayment();
+
+        if (paymentArray.isEmpty()) {
+            System.out.println("No payments recorded on file. Returning to Menu ...");
+        } else {
+            System.out.println("Listing all Payment Transactions:");
+            for (Transaction trs: paymentArray) {
                 System.out.println(trs);
             }
         }
@@ -160,7 +187,7 @@ public class LedgerApp {
                 System.out.println("Invalid amount! Please enter a valid number.");
             }
         }
-        transactionService.makePayment(description, vendor, amount * -1);
+        transactionService.makePayment(description, vendor, amount);
 
         System.out.println("Payment made successfully!");
     }
