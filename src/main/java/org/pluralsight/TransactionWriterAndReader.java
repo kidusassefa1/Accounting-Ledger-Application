@@ -41,6 +41,7 @@ public class TransactionWriterAndReader {
     public static void writeTransaction(Transaction newTransaction) {
         try {
             bufWriter = new BufferedWriter(new FileWriter(fileName, true));
+
             bufWriter.write(String.format("%s", newTransaction));
             bufWriter.newLine();
             bufWriter.close();
