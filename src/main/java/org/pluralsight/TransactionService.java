@@ -24,11 +24,7 @@ public class TransactionService {
 
     public ArrayList<Transaction> getAllTransaction() {
         ArrayList<Transaction> sortedList = new ArrayList<>(transactions);
-        sortedList.sort(
-                Comparator.comparing(Transaction::getDate)
-                        .thenComparing(Transaction::getTime)
-                        .reversed()
-        );
+        sortedList.sort(Comparator.comparing(Transaction::getDate).thenComparing(Transaction::getTime).reversed());
         return sortedList;
     }
 
