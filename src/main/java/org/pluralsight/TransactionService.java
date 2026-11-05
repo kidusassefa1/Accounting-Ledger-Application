@@ -14,7 +14,6 @@ public class TransactionService {
         Transaction newDeposit = new Transaction(description, vendor, amount);
         TransactionWriterAndReader.writeTransaction(newDeposit);
         transactions.add(newDeposit);
-
     }
 
     public void makePayment(String description, String vendor, double amount) {
@@ -24,7 +23,13 @@ public class TransactionService {
     }
 
     public ArrayList<Transaction> getAllTransaction() {
-        return transactions;
+        ArrayList<Transaction> sortedList = new ArrayList<>(transactions);
+        sortedList.sort(
+                Comparator.comparing(Transaction::getDate)
+                        .thenComparing(Transaction::getTime)
+                        .reversed()
+        );
+        return sortedList;
     }
 
     public ArrayList<Transaction> getDeposit() {
