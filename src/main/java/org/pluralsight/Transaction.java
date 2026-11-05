@@ -1,7 +1,6 @@
 package org.pluralsight;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,8 +12,6 @@ public class Transaction {
     private final double amount;
 
     public Transaction(String description, String vendorName, double amount) {
-//        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-//        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("H:mm:ss"));
         this.time = LocalTime.now();
         this.date = LocalDate.now();
         this.description = description;
@@ -52,6 +49,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return String.format("%s|%s|%s|%s|%.2f", date, time, description, vendorName, amount);
+        return String.format("%s|%s|%s|%s|%.2f", date, time.format(DateTimeFormatter.ofPattern("HH:mm:ss")), description, vendorName, amount);
     }
 }
