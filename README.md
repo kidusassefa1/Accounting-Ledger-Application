@@ -76,6 +76,14 @@ Accounting-Ledger-Application/
 ├── pom.xml
 └── README.md
 ```
+## 📚 Documentation
+
+Java API documentation is available in the
+[`docs/javadoc/`](docs/javadoc/index.html) directory.
+
+The documentation includes class descriptions,
+constructors, methods, parameters, and return values.
+
 
 ### Class Responsibilities
 
