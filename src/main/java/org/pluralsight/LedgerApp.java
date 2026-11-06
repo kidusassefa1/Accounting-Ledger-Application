@@ -18,9 +18,6 @@ public class LedgerApp {
      */
     public static void main(String[] args) throws InterruptedException {
 
-        //TODO: DO Bonus
-        //TODO: Experiment with JPanel fpr UI stuff
-
         start();
 
     }
