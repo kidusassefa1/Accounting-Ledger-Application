@@ -38,6 +38,7 @@ public class TransactionWriterAndReader {
         return transactionsArray;
     }
 
+
     public static void writeTransaction(Transaction newTransaction) {
         try {
             bufWriter = new BufferedWriter(new FileWriter(fileName, true));
