@@ -5,12 +5,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Reads transactions from and appends transactions to the pipe-delimited CSV file at DataFiles/transactions.csv.
+ */
 public class TransactionWriterAndReader {
     private BufferedReader bufReader;
     private static BufferedWriter bufWriter;
     private static String fileName = "DataFiles/transactions.csv";
 
-
+    /**
+     * Reads saved transactions from the pipe-delimited CSV file, skipping the first header line. An I/O failure is printed and the accumulated list is returned.
+     * @return loaded transactions, or an empty/partial list if no rows were loaded or reading failed
+     */
     public ArrayList<Transaction> loadTransactions() {
         ArrayList<Transaction> transactionsArray = new ArrayList<>();
         try {
@@ -38,7 +44,10 @@ public class TransactionWriterAndReader {
         return transactionsArray;
     }
 
-
+    /**
+     * Appends one transaction as a new CSV line. An I/O failure is printed rather than propagated to the caller.
+     * @param newTransaction transaction to append
+     */
     public static void writeTransaction(Transaction newTransaction) {
         try {
             bufWriter = new BufferedWriter(new FileWriter(fileName, true));
