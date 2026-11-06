@@ -96,7 +96,7 @@ public class TransactionReport {
         ArrayList<Transaction> result = new ArrayList<>();
 
         for (Transaction trs : transactionArray) {
-            if (trs.getVendorName().toLowerCase().contains(vendor.trim().toLowerCase())) {
+            if (trs.getVendorName().toLowerCase().startsWith(vendor.trim().toLowerCase())) {
                 result.add(trs);
             }
         }
