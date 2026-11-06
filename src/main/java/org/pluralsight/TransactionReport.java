@@ -5,8 +5,16 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Provides date-based and vendor-based filters for lists of financial transactions. All report methods return results sorted newest first.
+ */
 public class TransactionReport {
 
+    /**
+     * Finds transactions dated from the first day of the current month through today, inclusive.
+     * @param transactionArray transactions to search
+     * @return matching transactions sorted newest first
+     */
     public static ArrayList<Transaction> monthToDate(ArrayList<Transaction> transactionArray) {
         ArrayList<Transaction> result = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -22,6 +30,11 @@ public class TransactionReport {
         return result;
     }
 
+    /**
+     * Finds transactions dated from January 1 of the current year through today, inclusive.
+     * @param transactionArray transactions to search
+     * @return matching transactions sorted newest first
+     */
     public static ArrayList<Transaction> yearToDate(ArrayList<Transaction> transactionArray) {
         ArrayList<Transaction> result = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -37,7 +50,11 @@ public class TransactionReport {
         return result;
     }
 
-
+    /**
+     * Finds transactions in the previous calendar month, including year transitions.
+     * @param transactionArray transactions to search
+     * @return matching transactions sorted newest first
+     */
     public static ArrayList<Transaction> previousMonth(ArrayList<Transaction> transactionArray) {
         ArrayList<Transaction> result = new ArrayList<>();
         YearMonth previousMonth = YearMonth.now().minusMonths(1);
@@ -51,6 +68,11 @@ public class TransactionReport {
         return result;
     }
 
+    /**
+     * Finds transactions in the previous calendar year.
+     * @param transactionArray transactions to search
+     * @return matching transactions sorted newest first
+     */
     public static ArrayList<Transaction> previousYear(ArrayList<Transaction> transactionArray) {
         ArrayList<Transaction> result = new ArrayList<>();
         int previousYear = LocalDate.now().getYear() - 1;
@@ -64,6 +86,12 @@ public class TransactionReport {
         return result;
     }
 
+    /**
+     * Finds transactions whose vendor names contain the supplied text, ignoring letter case.
+     * @param vendor all or part of the vendor name to search for
+     * @param transactionArray transactions to search
+     * @return matching transactions sorted newest first
+     */
     public static ArrayList<Transaction> searchByVendor(String vendor, ArrayList<Transaction> transactionArray) {
         ArrayList<Transaction> result = new ArrayList<>();
 
