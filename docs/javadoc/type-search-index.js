@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.pluralsight","l":"LedgerApp"},{"p":"org.pluralsight","l":"Transaction"},{"p":"org.pluralsight","l":"TransactionReport"},{"p":"org.pluralsight","l":"TransactionService"},{"p":"org.pluralsight","l":"TransactionWriterAndReader"}];updateSearchResults();
