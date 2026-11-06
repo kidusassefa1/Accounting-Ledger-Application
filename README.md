@@ -66,6 +66,13 @@ Accounting-Ledger-Application/
 │                   ├── TransactionReport.java
 │                   └── TransactionWriterAndReader.java
 │
+├── docs/
+│   └── javadoc/
+│       ├── index.html
+│       ├── org/
+│       ├── stylesheet.css
+│       └── ...
+│
 ├── pom.xml
 └── README.md
 ```
