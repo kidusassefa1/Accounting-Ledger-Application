@@ -35,6 +35,9 @@ build/
 ### JavaDocs ###
 docs/javadoc
 
+### DataFiles ###
+DataFiles/
+
 ### VS Code ###
 .vscode/
 
