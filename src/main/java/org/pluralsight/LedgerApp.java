@@ -2,12 +2,14 @@ package org.pluralsight;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LedgerApp {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static TransactionService transactionService;
+    private static final int delayTime = 500;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         //TODO: Write JavaDoc for all methods
         //TODO: Class relationship diagram
@@ -18,7 +20,7 @@ public class LedgerApp {
 
     }
 
-    private static void start() {
+    private static void start() throws InterruptedException {
 
         TransactionWriterAndReader twr = new TransactionWriterAndReader();
         ArrayList<Transaction> transactions = twr.loadTransactions();
@@ -27,10 +29,15 @@ public class LedgerApp {
         displayHome();
     }
 
-    private static void displayHome() {
+    private static void displayHome() throws InterruptedException {
+        Thread.sleep(delayTime);
         String choice;
         do {
             System.out.print("""
+                   |-------------------------|
+                   |----Accounting Ledger----|
+                   |-------Application-------|
+                   |-------------------------|
                     D - Add Deposit
                     P - Make Payment
                     L - Ledger
@@ -48,10 +55,14 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("X"));
     }
 
-    private static void displayLedger() {
+    private static void displayLedger() throws InterruptedException {
         String choice;
+        Thread.sleep(delayTime);
         do {
             System.out.print("""
+                           |---------------|
+                           |--LEDGER MENU--|
+                           |---------------|
                         A - Display all transactions
                         D - Display Deposits
                         P - Display Payments
@@ -62,20 +73,24 @@ public class LedgerApp {
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "A" -> displayTransaction(transactionService.getAllTransaction());
-                case "D" -> displayDeposit();
-                case "P" -> displayPayment();
+                case "D" -> displayTransaction(transactionService.getDeposit());
+                case "P" -> displayTransaction(transactionService.getPayment());
                 case "R" -> displayReport();
-                case "H" -> System.out.println("Returning to home screen ...");
-                default -> System.out.println("Invalid choice! Please enter A, D, P, R or H.");
+                case "H" -> System.out.println("Returning to home screen ...\n");
+                default -> System.out.println("Invalid choice! Please enter A, D, P, R or H.\n");
             }
         } while (!choice.equalsIgnoreCase("H"));
     }
 
 
-    private static void displayReport() {
+    private static void displayReport() throws InterruptedException {
         String choice;
+        Thread.sleep(delayTime);
         do {
             System.out.print("""
+                           |----------------|
+                           |--REPORTS MENU--|
+                           |----------------|
                         1 - Month to Date
                         2 - Previous Month
                         3 - Year to date
@@ -87,18 +102,15 @@ public class LedgerApp {
             choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1" -> {
-                    ArrayList<Transaction> filteredList =
-                            TransactionReport.monthToDate(transactionService.getAllTransaction());
+                    ArrayList<Transaction> filteredList = TransactionReport.monthToDate(transactionService.getAllTransaction());
                     displayTransaction(filteredList);
                 }
                 case "2" -> {
-                    ArrayList<Transaction> filteredList =
-                            TransactionReport.previousMonth(transactionService.getAllTransaction());
+                    ArrayList<Transaction> filteredList = TransactionReport.previousMonth(transactionService.getAllTransaction());
                     displayTransaction(filteredList);
                 }
                 case "3" -> {
-                    ArrayList<Transaction> filteredList =
-                            TransactionReport.yearToDate(transactionService.getAllTransaction());
+                    ArrayList<Transaction> filteredList = TransactionReport.yearToDate(transactionService.getAllTransaction());
                     displayTransaction(filteredList);
                 }
                 case "4" -> {
@@ -114,49 +126,29 @@ public class LedgerApp {
                             TransactionReport.searchByVendor(vendor, transactionService.getAllTransaction());
                     displayTransaction(filteredList);
                 }
-                case "0" -> System.out.println("Returning to Ledger Menu  ...");
+                case "0" -> System.out.println("Returning to Ledger Menu ...");
                 default -> System.out.println("Invalid choice! Please enter 1 - 5, or 0 to return to Ledger Menu.");
             }
         } while (!choice.equalsIgnoreCase("0"));
     }
 
-    private static void displayTransaction(ArrayList<Transaction> transactionArray) {
+    private static void displayTransaction(ArrayList<Transaction> transactionArray) throws InterruptedException {
+        int count = 1;
         if (transactionArray.isEmpty()) {
             System.out.println("No Transactions Found, Returning To Menu ...");
+            Thread.sleep(delayTime);
+            return;
         } else {
             System.out.println("Listing all transactions:");
+            Thread.sleep(delayTime);
             for (Transaction trs: transactionArray) {
-                System.out.println(trs);
+                System.out.printf("%s - %s\n", count++, trs);
             }
         }
+        Thread.sleep(delayTime);
+        System.out.println("\nEnd of list! Returning to Menu . . .");
+        Thread.sleep(delayTime);
     }
-
-    private static void displayDeposit() {
-        ArrayList<Transaction> depositArray = transactionService.getDeposit();
-
-        if (depositArray.isEmpty()) {
-            System.out.println("No deposits recorded on file. Returning to Menu ...");
-        } else {
-            System.out.println("Listing all Deposit Transactions:");
-            for (Transaction trs: depositArray) {
-                System.out.println(trs);
-            }
-        }
-    }
-
-    private static void displayPayment() {
-        ArrayList<Transaction> paymentArray = transactionService.getPayment();
-
-        if (paymentArray.isEmpty()) {
-            System.out.println("No payments recorded on file. Returning to Menu ...");
-        } else {
-            System.out.println("Listing all Payment Transactions:");
-            for (Transaction trs: paymentArray) {
-                System.out.println(trs);
-            }
-        }
-    }
-
 
     private static void promptDeposit() {
         System.out.println("\n===== Add Deposit =====");
