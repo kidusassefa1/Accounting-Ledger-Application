@@ -2,17 +2,22 @@ package org.pluralsight;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Runs the accounting ledger command-line application and handles menu navigation and user input.
+ */
 public class LedgerApp {
     private static final Scanner scanner = new Scanner(System.in);
     private static TransactionService transactionService;
     private static final int delayTime = 500;
 
+    /**
+     * Starts the accounting ledger application.
+     * @param args command-line arguments (not used)
+     * @throws InterruptedException if a menu delay is interrupted
+     */
     public static void main(String[] args) throws InterruptedException {
 
-        //TODO: Write JavaDoc for all methods
-        //TODO: Class relationship diagram
         //TODO: DO Bonus
         //TODO: Experiment with JPanel fpr UI stuff
 
@@ -20,6 +25,10 @@ public class LedgerApp {
 
     }
 
+    /**
+     * Loads saved transactions, initializes the transaction service, and opens the home menu.
+     * @throws InterruptedException if a menu delay is interrupted
+     */
     private static void start() throws InterruptedException {
 
         TransactionWriterAndReader twr = new TransactionWriterAndReader();
@@ -29,6 +38,10 @@ public class LedgerApp {
         displayHome();
     }
 
+    /**
+     * Displays the home menu until the user chooses to exit.
+     * @throws InterruptedException if a menu delay is interrupted
+     */
     private static void displayHome() throws InterruptedException {
         Thread.sleep(delayTime);
         String choice;
@@ -55,6 +68,11 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("X"));
     }
 
+
+    /**
+     * Displays transaction viewing options and the reports menu until the user returns home.
+     * @throws InterruptedException if a menu delay is interrupted
+     */
     private static void displayLedger() throws InterruptedException {
         String choice;
         Thread.sleep(delayTime);
@@ -83,6 +101,10 @@ public class LedgerApp {
     }
 
 
+    /**
+     * Displays report options, prompts for vendor searches, and prints filtered transactions.
+     * @throws InterruptedException if a menu delay is interrupted
+     */
     private static void displayReport() throws InterruptedException {
         String choice;
         Thread.sleep(delayTime);
@@ -132,6 +154,12 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("0"));
     }
 
+
+    /**
+     * Prints a numbered list of transactions or a message when no transactions match.
+     * @param transactionArray transactions to display
+     * @throws InterruptedException if a display delay is interrupted
+     */
     private static void displayTransaction(ArrayList<Transaction> transactionArray) throws InterruptedException {
         int count = 1;
         if (transactionArray.isEmpty()) {
@@ -150,7 +178,12 @@ public class LedgerApp {
         Thread.sleep(delayTime);
     }
 
-    private static void promptDeposit() {
+
+    /**
+     * Prompts for deposit details, validates a positive finite amount, and records the deposit.
+     * @throws InterruptedException if a display delay is interrupted
+     */
+    private static void promptDeposit() throws InterruptedException {
         System.out.println("\n===== Add Deposit =====");
         System.out.print("Enter description: ");
         String description = scanner.nextLine().trim();
@@ -175,11 +208,16 @@ public class LedgerApp {
             }
         }
         transactionService.addDeposit(description, vendor, amount);
-
+        Thread.sleep(delayTime);
         System.out.println("Deposit added successfully!");
+        Thread.sleep(delayTime);
     }
 
-    private static void promptPayment() {
+    /**
+     * Prompts for payment details, validates a positive finite amount, and records the payment.
+     * @throws InterruptedException if a display delay is interrupted
+     */
+    private static void promptPayment() throws InterruptedException {
         System.out.println("\n===== Make Payment =====");
         System.out.print("Enter description: ");
         String description = scanner.nextLine().trim();
@@ -204,8 +242,8 @@ public class LedgerApp {
             }
         }
         transactionService.makePayment(description, vendor, amount);
-
-        System.out.println("Payment made successfully!");
+        Thread.sleep(delayTime);
+        System.out.println("Payment made successfully! Returning to Menu ...");
+        Thread.sleep(delayTime);
     }
-
 }
