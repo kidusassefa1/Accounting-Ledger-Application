@@ -1,8 +1,6 @@
 package org.pluralsight;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class LedgerApp {
@@ -10,6 +8,11 @@ public class LedgerApp {
     private static TransactionService transactionService;
 
     public static void main(String[] args) {
+
+        //TODO: Write JavaDoc for all methods
+        //TODO: Class relationship diagram
+        //TODO: DO Bonus
+        //TODO: Experiment with JPanel fpr UI stuff
 
         start();
 
@@ -20,19 +23,19 @@ public class LedgerApp {
         TransactionWriterAndReader twr = new TransactionWriterAndReader();
         ArrayList<Transaction> transactions = twr.loadTransactions();
         transactionService = new TransactionService(transactions);
-        System.out.println(transactions);
+
         displayHome();
     }
 
     private static void displayHome() {
         String choice;
         do {
-            System.out.println("""
+            System.out.print("""
                     D - Add Deposit
                     P - Make Payment
                     L - Ledger
                     X - Exit
-                    """);
+                    Enter your choice:\s""");
 
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
@@ -45,20 +48,20 @@ public class LedgerApp {
         } while (!choice.equalsIgnoreCase("X"));
     }
 
-    public static void displayLedger() {
+    private static void displayLedger() {
         String choice;
         do {
-            System.out.println("""
-                    A - Display all transactions
-                    D - Display Deposits
-                    P - Display Payments
-                    R - Reports
-                    H - Home
-                    """);
+            System.out.print("""
+                        A - Display all transactions
+                        D - Display Deposits
+                        P - Display Payments
+                        R - Reports
+                        H - Home
+                        Enter your choice:\s""");
 
             choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
-                case "A" -> displayAllTransactions();
+                case "A" -> displayTransaction(transactionService.getAllTransaction());
                 case "D" -> displayDeposit();
                 case "P" -> displayPayment();
                 case "R" -> displayReport();
@@ -69,39 +72,60 @@ public class LedgerApp {
     }
 
 
-    public static void displayReport() {
+    private static void displayReport() {
         String choice;
         do {
-            System.out.println("""
+            System.out.print("""
                         1 - Month to Date
                         2 - Previous Month
                         3 - Year to date
                         4 - Previous Years
                         5 - Search By Vendor
                         0 - Back
-                    """);
+                        Enter your choice:\s""");
 
             choice = scanner.nextLine().trim();
             switch (choice) {
-                case "1" -> { }
-                case "2" -> { }
-                case "3" -> { }
-                case "4" -> { }
-                case "5" -> { }
+                case "1" -> {
+                    ArrayList<Transaction> filteredList =
+                            TransactionReport.monthToDate(transactionService.getAllTransaction());
+                    displayTransaction(filteredList);
+                }
+                case "2" -> {
+                    ArrayList<Transaction> filteredList =
+                            TransactionReport.previousMonth(transactionService.getAllTransaction());
+                    displayTransaction(filteredList);
+                }
+                case "3" -> {
+                    ArrayList<Transaction> filteredList =
+                            TransactionReport.yearToDate(transactionService.getAllTransaction());
+                    displayTransaction(filteredList);
+                }
+                case "4" -> {
+                    ArrayList<Transaction> filteredList =
+                            TransactionReport.previousYear(transactionService.getAllTransaction());
+                    displayTransaction(filteredList);
+                }
+                case "5" -> {
+                    System.out.print("Vendor's name: ");
+                    String vendor = scanner.nextLine().trim();
+
+                    ArrayList<Transaction> filteredList =
+                            TransactionReport.searchByVendor(vendor, transactionService.getAllTransaction());
+                    displayTransaction(filteredList);
+                }
                 case "0" -> System.out.println("Returning to Ledger Menu  ...");
                 default -> System.out.println("Invalid choice! Please enter 1 - 5, or 0 to return to Ledger Menu.");
             }
         } while (!choice.equalsIgnoreCase("0"));
     }
 
-    private static void displayAllTransactions() {
-        ArrayList<Transaction> allTransactions = transactionService.getAllTransaction();
-
-        if (allTransactions.isEmpty()) {
-            System.out.println("There are no transactions on file, returning to Menu ...");
+    private static void displayTransaction(ArrayList<Transaction> transactionArray) {
+        if (transactionArray.isEmpty()) {
+            System.out.println("No Transactions Found, Returning To Menu ...");
         } else {
             System.out.println("Listing all transactions:");
-            for (Transaction trs: allTransactions) {
+            for (Transaction trs: transactionArray) {
                 System.out.println(trs);
             }
         }
